@@ -26,17 +26,15 @@ const ManageBooks = () => {
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    if (name === "publishedYear" || name === "rating") {
-      setBookData((prev) => ({
-        ...prev,
-        [name]: Number(value),
-      }));
-    } else {
-      setBookData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    setBookData((prev) => ({
+      ...prev,
+      [name]:
+        name === "publishedYear" || name === "rating"
+          ? parseFloat(value)
+          : name === "genre"
+          ? value.split(",").map((g) => g.trim())
+          : value,
+    }));
   };
 
   useEffect(() => {
@@ -133,7 +131,7 @@ const ManageBooks = () => {
                   id="genre"
                   placeholder="genre"
                   className="form-control"
-                  value={bookData.genre}
+                  value={bookData.genre.join(",") ?? []}
                   onChange={onChangeHandler}
                   required={isRequired}
                 />
